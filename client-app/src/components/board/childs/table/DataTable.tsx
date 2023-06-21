@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
     Card,
     Table,
@@ -11,32 +12,23 @@ import {
 } from "@tremor/react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../../stores/AuthStore";
-
-import type { IMember } from "../../../../types/Member";
 import { Children } from "react";
 import { CustomMessage } from "../../../layout";
+import { useMemberStore } from "../../../../stores/MemberStore";
+import { fetchMembers } from "../../../../services/member";
 
-const fetchMembers = async (token: string) => {
-    const url = "http://localhost:8081/api/members";
-    const options = {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    };
-
-    const response = await fetch(url, options);
-    const data = await response.json();
-    return data as IMember[];
-};
+import type { IMember } from "../../../../types/Member";
 
 export const DataTable = () => {
     const { auth } = useAuthStore((state) => state);
-    const { data, isLoading, error } = useQuery(
+    const { members, setMembers } = useMemberStore((state) => state);
+    const { data, isLoading, error, isError } = useQuery(
         ["getMembers"],
         async () => await fetchMembers("token" in auth! ? auth.token : ""),
         {
+            onSuccess(data) {
+                if (data) setMembers(data);
+            },
             onError: (error: Error) =>
                 console.log("Error fetching services: ", error),
         }
@@ -44,7 +36,8 @@ export const DataTable = () => {
 
     if (isLoading) return <CustomMessage message="Loading" isLoading />;
 
-    if (error) return <CustomMessage message="Error getting Members" />;
+    if (error || isError)
+        return <CustomMessage message="Error getting Members" />;
 
     if (!data || data.length === 0)
         return <CustomMessage message="No members found" />;
@@ -66,7 +59,7 @@ export const DataTable = () => {
                 </TableHead>
                 <TableBody>
                     {Children.toArray(
-                        data.map((item: IMember) => (
+                        members.map((item: IMember) => (
                             <TableRow className="align-middle whitespace-nowrap tabular-nums text-left p-4">
                                 <TableCell>{item.firstName}</TableCell>
                                 <TableCell>

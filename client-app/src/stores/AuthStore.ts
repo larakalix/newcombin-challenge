@@ -3,13 +3,13 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import type { ITokenResponse } from "../types/Auth";
 
-type AuthStoreProps = {
+type Props = {
     auth: ITokenResponse | null;
     setAuth: (auth: ITokenResponse) => void;
 };
 
 export const useAuthStore = create(
-    persist<AuthStoreProps>(
+    persist<Props>(
         (set, get) => ({
             auth: null,
             setAuth: (auth: ITokenResponse) => set({ auth }),

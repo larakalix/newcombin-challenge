@@ -2,7 +2,7 @@ import React from "react";
 
 export const Navbar = () => {
     return (
-        <header className="bg-green-500">
+        <header className="bg-slate-200">
             <nav className="w-full">
                 <ul className="flex items-center [&>li>a]:text-black [&>li>a]:flex [&>li>a]:p-8 [&>li>a]:flex-1 [&>li>a]:f-w-full">
                     <li>
