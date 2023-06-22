@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Children } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
     Formik,
     ErrorMessage,
@@ -43,7 +43,6 @@ const formFields: { name: string; label: string; placeholder: string }[] = [
 ];
 
 export const MemberForm = () => {
-    const queryClient = useQueryClient();
     const { auth } = useAuthStore((state) => state);
     const { addMember: concatMember } = useMemberStore((state) => state);
     const { initialValues, validationSchema } = useMemberForm();
@@ -61,6 +60,7 @@ export const MemberForm = () => {
                 toast.success("Member added successfully");
                 concatMember(data);
             },
+            onError: (error: Error) => toast.error(error.message),
         }
     );
 
@@ -87,7 +87,7 @@ export const MemberForm = () => {
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ errors, isSubmitting, resetForm }) => (
+                    {({ isValid, isSubmitting, resetForm }) => (
                         <Form className="flex flex-col gap-4">
                             {Children.toArray(
                                 formFields.map(
@@ -134,7 +134,7 @@ export const MemberForm = () => {
                             <Button
                                 size="xl"
                                 type="submit"
-                                disabled={isSubmitting}
+                                disabled={!isValid || isSubmitting}
                             >
                                 Submit
                             </Button>

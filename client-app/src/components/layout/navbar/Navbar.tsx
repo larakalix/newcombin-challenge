@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Navbar = () => {
     return (
         <header className="bg-slate-200">

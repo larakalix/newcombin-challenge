@@ -10,6 +10,7 @@ import {
     Text,
     Title,
 } from "@tremor/react";
+import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../../stores/AuthStore";
 import { Children } from "react";
@@ -26,11 +27,11 @@ export const DataTable = () => {
         ["getMembers"],
         async () => await fetchMembers("token" in auth! ? auth.token : ""),
         {
+            refetchInterval: 2 * 60 * 1000,
             onSuccess(data) {
                 if (data) setMembers(data);
             },
-            onError: (error: Error) =>
-                console.log("Error fetching services: ", error),
+            onError: (error: Error) => toast.error(error.message),
         }
     );
 

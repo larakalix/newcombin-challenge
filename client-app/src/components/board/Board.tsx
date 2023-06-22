@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import { useAuthStore } from "../../stores/AuthStore";
 import { Toaster } from "react-hot-toast";
 import { CustomMessage, DataTable, MemberForm } from "../layout";
@@ -17,8 +18,7 @@ export const Board = () => {
 
                 if (data && "token" in data) setAuth(data);
             },
-            onError: (error: Error) =>
-                console.log("Error fetching services: ", error),
+            onError: (error: Error) => toast.error(error.message),
         }
     );
 

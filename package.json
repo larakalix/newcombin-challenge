@@ -4,6 +4,7 @@
     "description": "Fast API CodeChallenge for juniors",
     "main": "index.js",
     "scripts": {
+        "dev": "node dev.js",
         "serve": "nodemon index.js",
         "start:api": "nodemon index.js",
         "start:app": "cd client-app && pnpm run dev",
