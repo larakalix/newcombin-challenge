@@ -10,7 +10,7 @@ type Props = {
 
 export const useAuthStore = create(
     persist<Props>(
-        (set, get) => ({
+        (set) => ({
             auth: null,
             setAuth: (auth: ITokenResponse) => set({ auth }),
         }),
